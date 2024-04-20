@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package exercise;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 
 /**
  *
@@ -55,7 +57,7 @@ public class Formulario extends javax.swing.JFrame {
 
         cmbTipoPessoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estudante", "Trabalhador" }));
 
-        cmbBicicleta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Bicicleta Normal", "Bicicleta Elétrica" }));
+        cmbBicicleta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal -> R$25.00", "Elétrica -> R$45.00" }));
 
         btnCalcular.setText("Calcular");
         btnCalcular.addActionListener(new java.awt.event.ActionListener() {
@@ -66,6 +68,16 @@ public class Formulario extends javax.swing.JFrame {
 
         lblValorTotal.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         lblValorTotal.setText("Valor Total");
+
+        ftfValorTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ftfValorTotalActionPerformed(evt);
+            }
+        });
+
+        ftfDataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
+
+        ftfDataDevolucao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         javax.swing.GroupLayout PrincipalLayout = new javax.swing.GroupLayout(Principal);
         Principal.setLayout(PrincipalLayout);
@@ -138,8 +150,24 @@ public class Formulario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcularActionPerformed
-        // TODO add your handling code here:
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        int tipoPessoa = cmbTipoPessoa.getSelectedIndex();
+        int bicicleta = cmbBicicleta.getSelectedIndex();
+        LocalDate dataDevolucao1 = LocalDate.parse(ftfDataDevolucao.getText(), formatter);
+        LocalDate dataInicio1 = LocalDate.parse(ftfDataInicio.getText(), formatter);
+
+        Calcular calcular = new Calcular(tipoPessoa, bicicleta, dataInicio1, dataDevolucao1);
+
+        double valorTotal = calcular.CalcularValorTotal();
+        
+        ftfValorTotal.setText(String.format("R$%2f", valorTotal));
+        ftfValorTotal.setEditable(false);
     }//GEN-LAST:event_btnCalcularActionPerformed
+
+    private void ftfValorTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftfValorTotalActionPerformed
+
+    }//GEN-LAST:event_ftfValorTotalActionPerformed
 
     /**
      * @param args the command line arguments
